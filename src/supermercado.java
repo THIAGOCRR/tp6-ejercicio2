@@ -67,6 +67,7 @@ public class supermercado extends javax.swing.JFrame {
 
         consultaNombre.setSelected(true);
         consultaNombre.setText("Consulta Por Nombre");
+        consultaNombre.setEnabled(true);
         consultaNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 consultaNombreActionPerformed(evt);
@@ -126,13 +127,7 @@ public class supermercado extends javax.swing.JFrame {
         
         
         
-        /*
-         formularioAlumno alumno=new formularioAlumno();
-       alumno.setVisible(true);
-       escritorio.add(alumno);
-       escritorio.moveToFront(alumno);
-        */
-        
+      
         
         
         
