@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/PC1/Desktop/Facu/LabProg/TP6_GUI_PRODUCTO/tp6-ejercicio2/src/forms/superMerka2.java</file>
             <file>file:/C:/Users/PC1/Desktop/Facu/LabProg/TP6_GUI_PRODUCTO/tp6-ejercicio2/src/forms/panelGestion.java</file>
-            <file>file:/C:/Users/PC1/Desktop/Facu/LabProg/TP6_GUI_PRODUCTO/tp6-ejercicio2/src/logica/Producto.java</file>
+            <file>file:/C:/Users/PC1/Desktop/Facu/LabProg/TP6_GUI_PRODUCTO/tp6-ejercicio2/src/forms/consulNombre.java</file>
+            <file>file:/C:/Users/PC1/Desktop/Facu/LabProg/TP6_GUI_PRODUCTO/tp6-ejercicio2/src/forms/consulPrecio.java</file>
+            <file>file:/C:/Users/PC1/Desktop/Facu/LabProg/TP6_GUI_PRODUCTO/tp6-ejercicio2/src/forms/consulRubro.java</file>
         </group>
     </open-files>
 </project-private>

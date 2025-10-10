@@ -6,6 +6,7 @@ package forms;
 
 import forms.panelGestion;
 import java.awt.*;
+import javax.swing.UIManager;
 
 /**
  *
@@ -17,6 +18,11 @@ public class superMerka2 extends javax.swing.JFrame {
      * Creates new form superMerka2
      */
     public superMerka2() {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         initComponents();
         setSize(800, 600);
         setResizable(false);
@@ -34,31 +40,62 @@ public class superMerka2 extends javax.swing.JFrame {
 
         panelContainer = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        menuAdm = new javax.swing.JMenu();
+        menuGestion = new javax.swing.JMenuItem();
+        menuConsultas = new javax.swing.JMenu();
+        menuNombre = new javax.swing.JMenuItem();
+        menuPrecio = new javax.swing.JMenuItem();
+        menuRubro = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("SuperMerka2");
         setPreferredSize(new java.awt.Dimension(800, 600));
 
         panelContainer.setLayout(new java.awt.CardLayout());
 
-        jMenu1.setText("Administracion");
-        jMenu1.setToolTipText("");
-        jMenu1.setName(""); // NOI18N
+        menuAdm.setText("Administracion");
+        menuAdm.setToolTipText("");
+        menuAdm.setName(""); // NOI18N
 
-        jMenuItem1.setText("Gestion de Productos");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        menuGestion.setText("Gestion de Productos");
+        menuGestion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                menuGestionActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        menuAdm.add(menuGestion);
 
-        menuBar.add(jMenu1);
+        menuBar.add(menuAdm);
 
-        jMenu2.setText("Consultas");
-        menuBar.add(jMenu2);
+        menuConsultas.setText("Consultas");
+
+        menuNombre.setText("Consultar por Nombre");
+        menuNombre.setToolTipText("");
+        menuNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuNombreActionPerformed(evt);
+            }
+        });
+        menuConsultas.add(menuNombre);
+
+        menuPrecio.setText("Consultar por Precio");
+        menuPrecio.setToolTipText("");
+        menuPrecio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPrecioActionPerformed(evt);
+            }
+        });
+        menuConsultas.add(menuPrecio);
+
+        menuRubro.setText("Consultar por Rubro");
+        menuRubro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuRubroActionPerformed(evt);
+            }
+        });
+        menuConsultas.add(menuRubro);
+
+        menuBar.add(menuConsultas);
 
         setJMenuBar(menuBar);
 
@@ -76,13 +113,40 @@ public class superMerka2 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void menuGestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuGestionActionPerformed
 
         panelGestion panelGestionProdu = new panelGestion();
         panelContainer.add(panelGestionProdu, "GESTION");
         CardLayout cl = (CardLayout) (panelContainer.getLayout());
+        panelContainer.setVisible(true);
         cl.show(panelContainer, "GESTION");
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_menuGestionActionPerformed
+
+    private void menuNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNombreActionPerformed
+        
+        consulNombre panelConsulNombre = new consulNombre();
+        panelContainer.add(panelConsulNombre, "CONSULTA NOMBRE");
+        CardLayout cl = (CardLayout) (panelContainer.getLayout());
+        panelContainer.setVisible(true);
+        cl.show(panelContainer, "CONSULTA NOMBRE");
+        
+    }//GEN-LAST:event_menuNombreActionPerformed
+
+    private void menuPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPrecioActionPerformed
+        consulPrecio panelConsulPrecio = new consulPrecio();
+        panelContainer.add(panelConsulPrecio, "CONSULTA PRECIO");
+        CardLayout cl = (CardLayout) (panelContainer.getLayout());
+        panelContainer.setVisible(true);
+        cl.show(panelContainer, "CONSULTA PRECIO");
+    }//GEN-LAST:event_menuPrecioActionPerformed
+
+    private void menuRubroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRubroActionPerformed
+        consulRubro panelConsulRubro = new consulRubro();
+        panelContainer.add(panelConsulRubro, "CONSULTA RUBRO");
+        CardLayout cl = (CardLayout) (panelContainer.getLayout());
+        panelContainer.setVisible(true);
+        cl.show(panelContainer, "CONSULTA RUBRO");
+    }//GEN-LAST:event_menuRubroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -120,10 +184,13 @@ public class superMerka2 extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenu menuAdm;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenu menuConsultas;
+    private javax.swing.JMenuItem menuGestion;
+    private javax.swing.JMenuItem menuNombre;
+    private javax.swing.JMenuItem menuPrecio;
+    private javax.swing.JMenuItem menuRubro;
     private javax.swing.JPanel panelContainer;
     // End of variables declaration//GEN-END:variables
 }

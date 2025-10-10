@@ -4,6 +4,7 @@
  */
 package forms;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import javax.swing.JOptionPane;
@@ -16,8 +17,9 @@ import logica.Producto;
  */
 public class panelGestion extends javax.swing.JPanel {
 
-    TreeSet<Producto> listaProdu = new TreeSet<>();
-   DefaultTableModel modeloTableProd1;
+    public static TreeSet<Producto> listaProdu = new TreeSet<>();
+    DefaultTableModel modeloTableProd1;
+    
 
     private void llenarTablaProd1() {
         modeloTableProd1 = (DefaultTableModel) tableProdu.getModel();
@@ -32,12 +34,12 @@ public class panelGestion extends javax.swing.JPanel {
             });
         }
     }
-    
-    private void filtrarPorRubro(String categoria) {     
+
+    private void filtrarPorRubro(String categoria) {
         modeloTableProd1.setRowCount(0);
         for (Producto p : listaProdu) {
             if (p.getRubro().equals(categoria)) {
-                modeloTableProd1.addRow(new Object[] {
+                modeloTableProd1.addRow(new Object[]{
                     p.getCodigo(),
                     p.getDescripcion(),
                     p.getPrecio(),
@@ -47,15 +49,15 @@ public class panelGestion extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void habilitarCampos(boolean habilitar) {
         textCod.setEnabled(habilitar);
         textDesc.setEnabled(habilitar);
         textPrecio.setEnabled(habilitar);
         comboRubro2.setEnabled(habilitar);
-        spinnerStock.setEnabled(habilitar);      
+        spinnerStock.setEnabled(habilitar);
     }
-    
+
     private void habilitarBotones(boolean nuevo, boolean guardar, boolean actualizar, boolean borrar, boolean buscar) {
         buttonNuevo.setEnabled(nuevo);
         buttonGuardar.setEnabled(guardar);
@@ -63,7 +65,7 @@ public class panelGestion extends javax.swing.JPanel {
         buttonBorrar.setEnabled(borrar);
         buttonBuscar.setEnabled(buscar);
     }
-    
+
     private void limpiarTodo() {
         textCod.setText("");
         textDesc.setText("");
@@ -71,13 +73,71 @@ public class panelGestion extends javax.swing.JPanel {
         comboRubro2.setSelectedIndex(0);
         spinnerStock.setValue(1);
     }
+
+    private void llenarTextField(Producto produ) {
+        textCod.setText(String.valueOf(produ.getCodigo()));
+        textDesc.setText(produ.getDescripcion());
+        textPrecio.setText(String.valueOf(produ.getPrecio()));
+        comboRubro2.setSelectedItem(produ.getRubro());
+        spinnerStock.setValue(produ.getStock());
+    }
+
+    private Producto buscarPorCodigo(Long cod) {
+        for (Producto p : listaProdu) {
+            if (p.getCodigo().equals(cod)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    private void buscarProductoTable(Long cod) {
+        modeloTableProd1.setRowCount(0);
+        for (Producto p : listaProdu) {
+            if (p.getCodigo().equals(cod)) {
+                modeloTableProd1.addRow(new Object[]{
+                    p.getCodigo(),
+                    p.getDescripcion(),
+                    p.getPrecio(),
+                    p.getRubro(),
+                    p.getStock()
+                });
+                return;
+            }
+
+        }
+        JOptionPane.showMessageDialog(this, "No se encontro el producto.");
+        llenarTablaProd1();
+    }
+
     /**
      * Creates new form panelGestion
      */
     public panelGestion() {
         initComponents();
+        tableProdu.setShowGrid(false);
+        buttonNuevo.setToolTipText("Limpia los campos para añadir un producto nuevo.");
+        buttonGuardar.setToolTipText("Guarda el producto en la lista.");
+        buttonAct.setToolTipText("Luego de realizar cambios, actualiza el producto.");
+        buttonBorrar.setToolTipText("Elimina el producto de la lista.");
+        buttonBuscar.setToolTipText("Busca por codigo de producto");
+
         habilitarCampos(false);
         habilitarBotones(true, false, false, false, false);
+        tableProdu.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                textCod.setEditable(false);
+                if (tableProdu.getSelectedRow() == -1) {
+                    return;
+                }
+                Long cod = (Long) tableProdu.getValueAt(tableProdu.getSelectedRow(), 0);
+                Producto produ = buscarPorCodigo(cod);
+                if (produ != null) {
+                    llenarTextField(produ);
+                    habilitarBotones(true, false, true, true, true);
+                }
+            }
+        });
 
     }
 
@@ -133,7 +193,7 @@ public class panelGestion extends javax.swing.JPanel {
         jLabel2.setBackground(new java.awt.Color(204, 204, 204));
         jLabel2.setText("Filtrar por Rubro");
 
-        comboRubro1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Bebidas", "Alimentos", "Perfumeria", "Higiene", "Limpieza", "Otros", "" }));
+        comboRubro1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar...", "Bebidas", "Alimentos", "Perfumeria", "Higiene", "Limpieza", "Otros" }));
         comboRubro1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 comboRubro1ActionPerformed(evt);
@@ -205,9 +265,19 @@ public class panelGestion extends javax.swing.JPanel {
 
         buttonBuscar.setIcon(new javax.swing.ImageIcon("C:\\Users\\PC1\\Desktop\\Facu\\LabProg\\TP6_GUI_PRODUCTO\\tp6-ejercicio2\\src\\imagenes\\icons8-search-25.png")); // NOI18N
         buttonBuscar.setText("Buscar");
+        buttonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonBuscarActionPerformed(evt);
+            }
+        });
 
         buttonSalir.setIcon(new javax.swing.ImageIcon("C:\\Users\\PC1\\Desktop\\Facu\\LabProg\\TP6_GUI_PRODUCTO\\tp6-ejercicio2\\src\\imagenes\\icons8-cancel-25.png")); // NOI18N
         buttonSalir.setText("Salir");
+        buttonSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSalirActionPerformed(evt);
+            }
+        });
 
         jLabel7.setBackground(new java.awt.Color(204, 204, 204));
         jLabel7.setText("Stock");
@@ -273,6 +343,11 @@ public class panelGestion extends javax.swing.JPanel {
 
         buttonBorrar.setIcon(new javax.swing.ImageIcon("C:\\Users\\PC1\\Desktop\\Facu\\LabProg\\TP6_GUI_PRODUCTO\\tp6-ejercicio2\\src\\imagenes\\icons8-delete-50.png")); // NOI18N
         buttonBorrar.setText("Eliminar");
+        buttonBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonBorrarActionPerformed(evt);
+            }
+        });
 
         buttonNuevo.setIcon(new javax.swing.ImageIcon("C:\\Users\\PC1\\Desktop\\Facu\\LabProg\\TP6_GUI_PRODUCTO\\tp6-ejercicio2\\src\\imagenes\\icons8-plus-50.png")); // NOI18N
         buttonNuevo.setText("Nuevo");
@@ -340,9 +415,8 @@ public class panelGestion extends javax.swing.JPanel {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6)
+                .addGap(12, 12, 12)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -354,6 +428,9 @@ public class panelGestion extends javax.swing.JPanel {
         habilitarCampos(true);
         habilitarBotones(true, true, true, true, true);
         limpiarTodo();
+        llenarTablaProd1();
+        textCod.setEditable(true);
+        tableProdu.clearSelection();
     }//GEN-LAST:event_buttonNuevoActionPerformed
 
     private void buttonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGuardarActionPerformed
@@ -386,33 +463,116 @@ public class panelGestion extends javax.swing.JPanel {
             }
         }
 
-        int confirmarCarga = JOptionPane.showOptionDialog(this, "Desea cargar este producto?", "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[] {"Si", "No"}, "Si");
+        int confirmarCarga = JOptionPane.showOptionDialog(this, "Desea cargar este producto?", "Confirmar", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Si", "No"}, "Si");
 
         if (confirmarCarga == 0) {
             Producto produ = new Producto(cod, desc, rubro, precio, stock);
             listaProdu.add(produ);
             llenarTablaProd1();
             habilitarBotones(true, false, false, false, false);
-        } 
+        }
 
     }//GEN-LAST:event_buttonGuardarActionPerformed
 
     private void buttonActActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonActActionPerformed
-        // TODO add your handling code here:
+        String sCod = textCod.getText();
+        String desc = textDesc.getText();
+        String sPrecio = textPrecio.getText();
+        String rubro = (String) comboRubro2.getSelectedItem();
+        int stock = (int) spinnerStock.getValue();
+
+        Long cod;
+        Double precio;
+
+        if (tableProdu.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Ningun producto seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            cod = Long.valueOf(sCod);
+            precio = Double.valueOf(sPrecio);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Formato no valido para campo numerico", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Producto produ = buscarPorCodigo(cod);
+        if (produ != null) {
+            produ.setDescripcion(desc);
+            produ.setPrecio(precio);
+            produ.setRubro(rubro);
+            produ.setStock(stock);
+
+            llenarTablaProd1();
+
+            JOptionPane.showMessageDialog(this, "El producto fue actualizado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontro el producto.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_buttonActActionPerformed
 
     private void comboRubro1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboRubro1ActionPerformed
-        String categoria = (String) comboRubro1.getSelectedItem();
-        if (comboRubro1.getSelectedItem().equals("Seleccionar...")) {
-            llenarTablaProd1();
-        } else {
-            filtrarPorRubro(categoria);
+        try {
+            String categoria = (String) comboRubro1.getSelectedItem();
+            if (comboRubro1.getSelectedItem().equals("Seleccionar...")) {
+                llenarTablaProd1();
+            } else {
+                filtrarPorRubro(categoria);
+            }
+        } catch (NullPointerException e) {
+            JOptionPane.showMessageDialog(this, "No hay elementos para mostrar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_comboRubro1ActionPerformed
 
     private void comboRubro2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboRubro2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboRubro2ActionPerformed
+
+    private void buttonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBorrarActionPerformed
+        if (tableProdu.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un producto para eliminar.");
+            return;
+        }
+
+        JOptionPane.showOptionDialog(this, "Esta seguro de eliminar este producto?", "Confirmar", JOptionPane.YES_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[]{"Si"}, "Si");
+
+        Long cod = (Long) tableProdu.getValueAt(tableProdu.getSelectedRow(), 0);
+        Producto produ = buscarPorCodigo(cod);
+        listaProdu.remove(produ);
+        modeloTableProd1.removeRow(tableProdu.getSelectedRow());
+        modeloTableProd1 = (DefaultTableModel) tableProdu.getModel();
+        llenarTextField(produ);
+        habilitarBotones(true, true, true, true, true);
+        JOptionPane.showMessageDialog(this, "Producto eliminado correctamente.");
+        limpiarTodo();
+        textCod.setEditable(true);
+    }//GEN-LAST:event_buttonBorrarActionPerformed
+
+    private void buttonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonBuscarActionPerformed
+        String sCod = textCod.getText();
+
+        if (sCod == null || sCod.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese un codigo para buscar un producto.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Long cod;
+            try {
+                cod = Long.valueOf(sCod);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Formato no valido para campo numerico", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            buscarProductoTable(cod);
+            tableProdu.setRowSelectionInterval(0, 0);
+
+        }
+    }//GEN-LAST:event_buttonBuscarActionPerformed
+
+    private void buttonSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSalirActionPerformed
+        java.awt.Container panelContainer = this.getParent();
+        panelContainer.setVisible(false);
+    }//GEN-LAST:event_buttonSalirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
